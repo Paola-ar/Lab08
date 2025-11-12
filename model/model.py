@@ -1,3 +1,4 @@
+from database.consumo_DAO import ConsumoDAO
 from database.impianto_DAO import ImpiantoDAO
 
 '''
@@ -26,6 +27,13 @@ class Model:
         :return: lista di tuple --> (nome dell'impianto, media), es. (Impianto A, 123)
         """
         # TODO
+        for impianto in self._impianti:
+            consumi_impianto = impianto.get_consumi()
+            for consumo in consumi_impianto:
+                if consumo.data.month == mese:
+                    return (impianto.nome, sum(consumo.kwh)/len(consumo.data.day))
+            #lista_consumi = impianto.get_consumi()
+
 
     def get_sequenza_ottima(self, mese:int):
         """
