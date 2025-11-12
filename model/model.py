@@ -27,12 +27,15 @@ class Model:
         :return: lista di tuple --> (nome dell'impianto, media), es. (Impianto A, 123)
         """
         # TODO
+        lista_medie_per_impianto = []
         for impianto in self._impianti:
             consumi_impianto = impianto.get_consumi()
+            consumi_mese_cercato = []
             for consumo in consumi_impianto:
                 if consumo.data.month == mese:
-                    return (impianto.nome, sum(consumo.kwh)/len(consumo.data.day))
-            #lista_consumi = impianto.get_consumi()
+                    consumi_mese_cercato.append(consumo.kwh)
+            lista_medie_per_impianto.append((impianto.nome, sum(consumi_mese_cercato)/len(consumi_mese_cercato)))
+        return lista_medie_per_impianto
 
 
     def get_sequenza_ottima(self, mese:int):
@@ -55,6 +58,12 @@ class Model:
     def __ricorsione(self, sequenza_parziale, giorno, ultimo_impianto, costo_corrente, consumi_settimana):
         """ Implementa la ricorsione """
         # TODO
+        if giorno >7:
+            self.__costo_ottimo = costo_corrente
+            self.__sequenza_ottima.append(sequenza_parziale)
+        #else:
+        #self.__costo_ottimo inizializzato a meno uno
+        #self.__sequenza_ottima lista
 
     def __get_consumi_prima_settimana_mese(self, mese: int):
         """
@@ -62,4 +71,14 @@ class Model:
         :return: un dizionario: {id_impianto: [kwh_giorno1, ..., kwh_giorno7]}
         """
         # TODO
+        dizionario_prima_settimana = {}
+        for impianto in self._impianti:
+            dizionario_prima_settimana[impianto.id] = []
+            consumi_impianto = impianto.get_consumi()
+            for consumo in consumi_impianto:
+                if consumo.data.month == mese:
+                    if consumo.data.day > 0 and consumo.data.day <= 7:
+                        dizionario_prima_settimana[id].append(consumo.kwh)
+        print(dizionario_prima_settimana)
+
 
