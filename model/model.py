@@ -58,12 +58,31 @@ class Model:
     def __ricorsione(self, sequenza_parziale, giorno, ultimo_impianto, costo_corrente, consumi_settimana):
         """ Implementa la ricorsione """
         # TODO
-        if giorno >7:
-            self.__costo_ottimo = costo_corrente
-            self.__sequenza_ottima.append(sequenza_parziale)
-        #else:
-        #self.__costo_ottimo inizializzato a meno uno
-        #self.__sequenza_ottima lista
+        if giorno > 7:
+            if self.__costo_ottimo == -1 or costo_corrente < self.__costo_ottimo:
+                self.__costo_ottimo = costo_corrente
+                self.__sequenza_ottima = sequenza_parziale.copy()
+            return
+
+        lista_impianti = list(consumi_settimana.keys())
+
+        for impianto in lista_impianti:
+            costo_giorno = consumi_settimana[impianto][giorno -1]
+            costo_spostamento = 0
+            if ultimo_impianto is not None and ultimo_impianto != impianto:
+                costo_spostamento = 5
+
+            nuovo_costo = costo_corrente + costo_giorno + costo_spostamento
+
+            if self.__costo_ottimo != -1 and self.__costo_ottimo <= nuovo_costo:
+                continue
+
+            sequenza_parziale.append(impianto)
+
+            self.__ricorsione(sequenza_parziale, giorno+1, impianto, nuovo_costo, consumi_settimana)
+
+            sequenza_parziale.pop()
+
 
     def __get_consumi_prima_settimana_mese(self, mese: int):
         """
@@ -78,7 +97,7 @@ class Model:
             for consumo in consumi_impianto:
                 if consumo.data.month == mese:
                     if consumo.data.day > 0 and consumo.data.day <= 7:
-                        dizionario_prima_settimana[id].append(consumo.kwh)
-        print(dizionario_prima_settimana)
+                        dizionario_prima_settimana[impianto.id].append(consumo.kwh)
+        return(dizionario_prima_settimana)
 
 
