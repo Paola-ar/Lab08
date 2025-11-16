@@ -19,7 +19,6 @@ class Impianto:
         # TODO
         self.lista_consumi = ConsumoDAO.get_consumi(self.id)
         return self.lista_consumi
-        #print(self.lista_consumi)
 
     def __eq__(self, other):
         return isinstance(other, Impianto) and self.id == other.id
